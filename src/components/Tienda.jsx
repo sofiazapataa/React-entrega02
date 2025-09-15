@@ -1,7 +1,6 @@
-// src/components/Tienda.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ProductCard from "./ProductCard"; 
+import ProductCard from "./ProductCard";
 
 function Tienda() {
   const [productos, setProductos] = useState([]);
@@ -15,7 +14,7 @@ function Tienda() {
         if (!res.ok) throw new Error("HTTP " + res.status);
 
         const data = await res.json();
-        setProductos(data); 
+        setProductos(data);
       } catch (e) {
         console.error(e);
         setError("Error al cargar los productos");
@@ -29,25 +28,20 @@ function Tienda() {
 
   if (loading) return <p>Cargando productos…</p>;
   if (error) return <p>{error}</p>;
-  if (productos.length === 0) return <p>No hay productos.</p>; 
+  if (productos.length === 0) return <p>No hay productos.</p>;
 
   return (
-    <div>
+    <div className="tienda">
       <h2>Nuestros productos</h2>
       <ul className="cards">
-        {productos.map((prod) => ( 
+        {productos.map((prod) => (
           <li key={prod.id} className="card">
-            <ProductCard product={prod}>
-              <p style={{ margin: 0 }}>
-                Precio: <strong>${prod.price}</strong> 
-              </p>
-              <small style={{ color: "#777" }}>
-                Categoría: {prod.category} 
-              </small>
-              <div style={{ marginTop: 8 }}>
-                <Link to={`/tienda/${prod.id}`}>Ver detalle</Link> 
-              </div>
-            </ProductCard>
+            <ProductCard product={prod} />
+            <p className="price">Precio: <strong>${prod.price}</strong></p>
+            <small className="category">Categoría: {prod.category}</small>
+            <div className="ver-mas">
+              <Link to={`/tienda/${prod.id}`}>Ver más</Link>
+            </div>
           </li>
         ))}
       </ul>

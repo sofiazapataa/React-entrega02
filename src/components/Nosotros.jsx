@@ -1,9 +1,13 @@
-function Nosotros(){
-    return(
-        <div>
-            <h2>Sobre Nosotros</h2>
-            <p>este proyecto es una version mini de una tienda con la API FakeStoreApi</p>
-        </div>
-    )
+function Nosotros() {
+  return (
+    <section className="nosotros">
+      <h2>Sobre Nosotros</h2>
+      <p>
+        Este proyecto es una versión mini de una tienda creada con la API
+        <span className="api"> FakeStoreApi</span>.
+      </p>
+    </section>
+  );
 }
-export default Nosotros
+
+export default Nosotros;
