@@ -3,7 +3,7 @@ import React from "react"
 function Footer(){
     return(
         <footer className="site-footer">
-      <h2 className="footer-title">Tienda de Ropa</h2>
+      <h2 className="footer-title">Kosmos</h2>
       <h3 className="footer-subtitle">Podés encontrarnos en</h3>
 
       <div className="footer-links">

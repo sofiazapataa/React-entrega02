@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 function Home() {
   return (
     <div className="home">
-      <h1>Bienvenidos a nuestra tienda</h1>
-      <p>Podras encontrar variedad de talles y colores!</p>
+      <h1>Bienvenidos KOSMOS</h1>
+      <p>Una tienda de cosmetica natural</p>
       <Link to="/tienda">
-        <button className="btn-primary">Ver Tienda</button>
+        <button className="btn-primary">Ver Productos</button>
       </Link>
     </div>
   );

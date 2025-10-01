@@ -2,7 +2,7 @@
 function ProductCard({ product, children }) {
   return (
     <div className="product-card">
-      <img src={product.image} alt={product.title} />
+      <img src={product.imageURL} alt={product.title} className="product-img" />
       <h3>{product.title}</h3>
       {children} 
     </div>

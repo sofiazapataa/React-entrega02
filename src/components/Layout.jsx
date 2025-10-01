@@ -11,7 +11,7 @@ function Layout() {
             <Link to="/" className="navbar-link">Home</Link>
           </li>
           <li className="navbar-item">
-            <Link to="/tienda" className="navbar-link">Tienda</Link>
+            <Link to="/tienda" className="navbar-link">Productos</Link>
           </li>
           <li className="navbar-item">
             <Link to="/nosotros" className="navbar-link">Nosotros</Link>

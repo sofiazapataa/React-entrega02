@@ -1,7 +1,9 @@
-// src/pages/Detalle.jsx (o donde lo tengas)
+// src/components/Detalle.jsx
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import ProductCard from "../components/ProductCard";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../main"; 
+import ProductCard from "./ProductCard"; 
 
 function Detalle() {
   const { id } = useParams();
@@ -11,11 +13,17 @@ function Detalle() {
 
   useEffect(() => {
     let cancel = false;
+
     (async () => {
       try {
-        const res = await fetch(`https://fakestoreapi.com/products/${id}`);
-        const data = await res.json();
-        if (!cancel) setProducto(data);
+        const docRef = doc(db, "Items", id); 
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists() && !cancel) {
+          setProducto({ id: docSnap.id, ...docSnap.data() });
+        } else if (!cancel) {
+          setError("Producto no encontrado");
+        }
       } catch (e) {
         if (!cancel) setError("Error al cargar el producto");
         console.error(e);
@@ -23,7 +31,10 @@ function Detalle() {
         if (!cancel) setLoading(false);
       }
     })();
-    return () => { cancel = true; };
+
+    return () => {
+      cancel = true;
+    };
   }, [id]);
 
   if (loading) return <p>Cargando…</p>;
@@ -43,9 +54,11 @@ function Detalle() {
           <strong>${producto.price}</strong>
         </p>
 
-        <span className="badge">{producto.category}</span>
+        <span className="badge">{producto.categoryId}</span>
 
-        <p className="description">{producto.description}</p>
+        <p className="description">{producto.descripcion}</p>
+        
+        <p>Stock disponible: {producto.stock}</p>
 
         <button className="buy-btn" onClick={handleComprar}>
           Comprar

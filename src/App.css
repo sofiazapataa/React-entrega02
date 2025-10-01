@@ -40,8 +40,8 @@
 }
 
 .btn-primary {
-  background-color: #0077cc;
-  color: white;
+  background-color: #4b6806;
+  color: rgb(255, 255, 255);
   font-size: 1rem;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -51,19 +51,18 @@
 }
 
 .btn-primary:hover {
-  background-color: #005fa3;
+  background-color: #1d2301;
   transform: translateY(-2px);
 }
 /* tienda */
 /* contenedor general */
 .tienda {
-  padding: 2rem;
   text-align: center;
 }
 
 .tienda h2 {
-  margin-bottom: 1.5rem;
-  color: #222;
+  padding: 10px;
+  color: #ffffff;
 }
 
 /* grilla de productos */
@@ -95,10 +94,11 @@
 
 /* bloque con imagen y título */
 .product-card img {
-  max-width: 120px;
-  height: 150px;
+  max-width: 200px;
+ height: 210px;
   object-fit: contain;
-  margin-bottom: 0.8rem;
+  margin-bottom: 5px;
+  border-radius: 8px;
 }
 
 .product-card h3 {
@@ -125,7 +125,7 @@
   display: inline-block;
   margin-top: 0.6rem;
   padding: 0.4rem 0.8rem;
-  background-color: #0077cc;
+  background-color:  #4b6806;
   color: white;
   border-radius: 4px;
   text-decoration: none;
@@ -134,7 +134,7 @@
 }
 
 .ver-mas a:hover {
-  background-color: #005fa3;
+  background-color: #1b2701;
 }
 
 
@@ -149,40 +149,47 @@
   text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
-
+.nosotros h3{
+  font-size: 30px;
+  color: #111;
+}
 .nosotros h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
+  font-size: 20px;
   color: #222;
 }
 
 .nosotros p {
-  font-size: 1rem;
+  font-size: 15px;
   color: #555;
   line-height: 1.6;
-}
-
-.nosotros .api {
-  font-weight: bold;
-  color: #0077cc;
 }
 /* detalle */
 /* Contenedor general de la vista detalle */
 .detalle {
-  max-width: 960px;
-  margin: 2rem auto;
+  max-width: 930px;
+  margin: 15px auto;
   padding: 0 1rem;
 }
 
 /* Link de volver */
 .back-link {
-  display: inline-block;
-  margin-bottom: 1rem;
-  color: #0077cc;
+  display: block;
+  padding: 8px 2px ;
+  margin-bottom: 20px;
+  color:  #2a3b02;
   text-decoration: none;
   font-weight: 600;
+  background-color: #ffffff;
+  border-radius: 20px;
+  max-width: 110px;
+  font-size: 12px;
 }
-.back-link:hover { text-decoration: underline; }
+.back-link:hover { 
+  text-decoration: none;
+  background-color: #546c05;
+  color: white;
+
+ }
 
 .detalle .product-card {
   margin: 0 auto;
@@ -202,6 +209,7 @@
   object-fit: contain;
   margin: 0 auto 0.8rem;
   display: block;
+  border-radius: 10px;
 }
 
 .detalle .product-card h3 {
@@ -253,9 +261,9 @@
 /* LayOut */
 /* Navbar general */
 .navbar {
-  background: #0077cc;       
+  background: #4b6806;       
   padding: 12px 20px;
-  border-bottom: 2px solid #0a5bd8; 
+  border-bottom: 2px solid  #314504; 
 }
 
 /* Lista horizontal */
@@ -291,7 +299,7 @@
 
 /* footer */
 .site-footer {
-  background: #0e72ca;
+  background: #4b6806;
   border-top: 1px solid #e0e0e0;
   padding: 24px 16px;
   text-align: center;
