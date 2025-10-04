@@ -32,13 +32,13 @@ export default function Carrito() {
   };
 
   if (loading) return <p>Cargando carrito…</p>;
-  if (items.length === 0) return <p>🛒 Tu carrito está vacío.</p>;
+  if (items.length === 0) return <p>Tu carrito está vacío.</p>;
 
   const total = items.reduce((acc, item) => acc + item.price * item.cantidad, 0);
 
   return (
     <section className="carrito">
-      <h2>🛍️ Tu Carrito</h2>
+      <h2> Tu Carrito</h2>
       <ul className="carrito-lista">
         {items.map(item => (
           <li key={item.id} className="carrito-item">
@@ -48,7 +48,7 @@ export default function Carrito() {
               <p>Precio: ${item.price}</p>
               <p>Cantidad: {item.cantidad}</p>
             </div>
-            <button onClick={() => eliminarProducto(item.id)}>❌ Eliminar</button>
+            <button onClick={() => eliminarProducto(item.id)}>Eliminar</button>
           </li>
         ))}
       </ul>

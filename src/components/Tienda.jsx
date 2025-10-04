@@ -95,7 +95,7 @@ export default function Tienda() {
 
       alert(`✅ "${producto.title}" agregado al carrito`);
     } catch (e) {
-      console.error("❌ Error al agregar al carrito:", e);
+      console.error("Error al agregar al carrito:", e);
       alert("No se pudo agregar el producto");
     }
   };
@@ -146,7 +146,7 @@ export default function Tienda() {
                     className="btn-comprar"
                     onClick={() => comprarProducto(producto)}
                   >
-                    🛒 Comprar
+                     Comprar
                   </button>
                 </div>
               </ProductCard>

@@ -65,7 +65,7 @@ function Detalle() {
       alert(`✅ "${producto.title}" se agregó al carrito`);
     } catch (e) {
       console.error("Error al agregar al carrito:", e);
-      alert("❌ No se pudo agregar el producto");
+      alert(" No se pudo agregar el producto");
     }
   };
 
@@ -79,7 +79,7 @@ function Detalle() {
         <p className="price-lg"><strong>${producto.price}</strong></p>
         <p className="description">{producto.descripcion}</p>
         <p>Stock disponible: {producto.stock}</p>
-        <button className="buy-btn" onClick={handleComprar}>🛒 Agregar al carrito</button>
+        <button className="buy-btn" onClick={handleComprar}> Agregar al carrito</button>
       </ProductCard>
     </section>
   );

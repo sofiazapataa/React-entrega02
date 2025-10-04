@@ -40,7 +40,7 @@ function Layout() {
           </li>
           <li className="navbar-item">
             <Link to="/carrito" className="navbar-link">
-              🛒 Carrito{" "}
+              Carrito{" "}
               {totalCarrito > 0 && (
                 <span className="cart-badge">{totalCarrito}</span>
               )}
