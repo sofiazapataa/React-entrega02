@@ -1,4 +1,4 @@
-// App.jsx
+// src/App.jsx
 import { useState } from "react"; 
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -8,7 +8,9 @@ import Layout from "./components/Layout";
 import Nosotros from "./components/Nosotros";
 import Tienda from "./components/Tienda";
 import Detalle from "./components/Detalle";
+import Carrito from "./components/Carrito"; 
 import NotFound from "./components/NotFound"; 
+
 function App() {
   const [count, setCount] = useState(0); 
 
@@ -20,6 +22,7 @@ function App() {
           <Route path="nosotros" element={<Nosotros />} />
           <Route path="tienda" element={<Tienda />} />
           <Route path="tienda/:id" element={<Detalle />} /> 
+          <Route path="carrito" element={<Carrito />} /> 
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

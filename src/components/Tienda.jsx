@@ -1,61 +1,104 @@
 // src/components/Tienda.jsx
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
 import { db } from "../main";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 
-const normalize = (s) => (s ?? "").toString().trim().toLowerCase();
-const toTitle = (s) =>
-  (s ?? "").toString().trim().replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase());
-
-function Tienda() {
+export default function Tienda() {
   const [categorias, setCategorias] = useState(["Todas"]);
-  const [categoria, setCategoria] = useState("Todas");
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Todas");
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const normalizarCategoria = (str) => {
+    if (!str) return "";
+    return str.toString().trim().toLowerCase();
+  };
+
   useEffect(() => {
-    (async () => {
+    async function cargarCategorias() {
       try {
-        const snap = await getDocs(collection(db, "Items"));
-        const map = new Map(); 
-        snap.forEach(d => {
-          const c = d.data().categoryId;
-          if (!c) return;
-          const key = normalize(c);
-          if (!map.has(key)) map.set(key, c.toString().trim());
-        });
-        const unicas = Array.from(map.values()).sort((a, b) => a.localeCompare(b));
+        const snapshot = await getDocs(collection(db, "Items"));
+        const todas = snapshot.docs
+          .map((doc) => normalizarCategoria(doc.data().categoryId))
+          .filter(Boolean);
+
+        const unicas = [...new Set(todas)].sort();
         setCategorias(["Todas", ...unicas]);
       } catch (e) {
         console.error(e);
         setError("Error al cargar categorías");
       }
-    })();
+    }
+    cargarCategorias();
   }, []);
 
   useEffect(() => {
-    (async () => {
+    async function cargarProductos() {
       setLoading(true);
       setError("");
+
       try {
-        const baseRef = collection(db, "Items");
-        const q = categoria === "Todas"
-          ? baseRef
-          : query(baseRef, where("categoryId", "==", categoria)); 
-        const snap = await getDocs(q);
-        const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        setProductos(data);
+        const itemsRef = collection(db, "Items");
+        let consulta = itemsRef;
+
+        if (categoriaSeleccionada !== "Todas") {
+          consulta = query(itemsRef, where("categoryId", "==", categoriaSeleccionada.toLowerCase()));
+        }
+
+        const snapshot = await getDocs(consulta);
+        const lista = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setProductos(lista);
       } catch (e) {
         console.error(e);
-        setError("Error al cargar los productos");
+        setError("Error al cargar productos");
       } finally {
         setLoading(false);
       }
-    })();
-  }, [categoria]);
+    }
+    cargarProductos();
+  }, [categoriaSeleccionada]);
+
+  const obtenerCarritoId = () => {
+    let carritoId = localStorage.getItem("cartId");
+    if (!carritoId) {
+      carritoId = crypto.randomUUID();
+      localStorage.setItem("cartId", carritoId);
+    }
+    return carritoId;
+  };
+
+  const comprarProducto = async (producto) => {
+    try {
+      const carritoId = obtenerCarritoId();
+      const carritoRef = collection(db, "carritos", carritoId, "items");
+
+      const q = query(carritoRef, where("productoId", "==", producto.id));
+      const snap = await getDocs(q);
+
+      if (!snap.empty) {
+        const docRef = snap.docs[0].ref;
+        const datos = snap.docs[0].data();
+        await updateDoc(docRef, { cantidad: datos.cantidad + 1 });
+      } else {
+        await addDoc(carritoRef, {
+          productoId: producto.id,
+          title: producto.title,
+          price: producto.price,
+          imageURL: producto.imageURL,
+          cantidad: 1,
+          fecha: new Date(),
+        });
+      }
+
+      alert(`✅ "${producto.title}" agregado al carrito`);
+    } catch (e) {
+      console.error("❌ Error al agregar al carrito:", e);
+      alert("No se pudo agregar el producto");
+    }
+  };
 
   if (loading) return <p>Cargando productos…</p>;
   if (error) return <p>{error}</p>;
@@ -64,14 +107,16 @@ function Tienda() {
     <div className="tienda">
       <h2>Nuestros productos</h2>
 
-      {/* Filtro */}
-      <div className="filtros" style={{ marginBottom: 16 }}>
+      <div className="filtros" style={{ marginBottom: "16px" }}>
         <label>
           Filtrar por categoría:{" "}
-          <select value={categoria} onChange={e => setCategoria(e.target.value)}>
-            {categorias.map(cat => (
+          <select
+            value={categoriaSeleccionada}
+            onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+          >
+            {categorias.map((cat) => (
               <option key={cat} value={cat}>
-                {cat === "Todas" ? "Todas" : toTitle(cat)}
+                {cat}
               </option>
             ))}
           </select>
@@ -79,16 +124,30 @@ function Tienda() {
       </div>
 
       {productos.length === 0 ? (
-        <p>No hay productos en “{categoria}”.</p>
+        <p>No hay productos en “{categoriaSeleccionada}”.</p>
       ) : (
         <ul className="cards">
-          {productos.map((prod) => (
-            <li key={prod.id} className="card">
-              <ProductCard product={prod}>
-                <p className="price">Precio: <strong>${prod.price}</strong></p>
-                <small className="category">Categoría: {prod.categoryId}</small>
-                <div className="ver-mas">
-                  <Link to={`/tienda/${prod.id}`}>Ver más</Link>
+          {productos.map((producto) => (
+            <li key={producto.id} className="card">
+              <ProductCard product={producto}>
+                <p className="price">
+                  Precio: <strong>${producto.price}</strong>
+                </p>
+                <small className="category">
+                  Categoría: {producto.categoryId}
+                </small>
+
+                <div className="acciones-card">
+                  <Link to={`/tienda/${producto.id}`} className="btn-ver-mas">
+                    Ver más
+                  </Link>
+
+                  <button
+                    className="btn-comprar"
+                    onClick={() => comprarProducto(producto)}
+                  >
+                    🛒 Comprar
+                  </button>
                 </div>
               </ProductCard>
             </li>
@@ -98,5 +157,3 @@ function Tienda() {
     </div>
   );
 }
-
-export default Tienda;
